@@ -5,3 +5,4 @@ if not find_dotenv():
     exit('Переменные окружения не загружены т.к отсутствует файл .env')
 else:
     load_dotenv()
+BOT_TOKEN = os.environ['BOT_TOKEN']
