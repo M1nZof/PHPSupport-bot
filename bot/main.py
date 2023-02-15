@@ -3,6 +3,7 @@
 #
 # if __name__ == '__main__':
 #     updater.start_polling()
+from bot.states.start_states import States
 from config import config
 
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
@@ -14,8 +15,6 @@ from telegram.ext import (
     ConversationHandler,
 )
 
-ROLE, FREELANCE_START, CUSTOMER_START, CUSTOMER_SUBSCRIBE, LOCATION, BIO = range(6)
-
 
 def start(update, _):
     reply_keyboard = [['Я разработчик', 'Я заказчик']]
@@ -26,7 +25,7 @@ def start(update, _):
         'Команда /cancel, чтобы прекратить разговор',
         reply_markup=markup_key
     )
-    return ROLE
+    return States.ROLE
 
 
 def freelance_menu(update, _):
@@ -36,7 +35,7 @@ def freelance_menu(update, _):
         'Описание работы бота для фрилансера',
         reply_markup=markup_key
     )
-    return FREELANCE_START
+    return States.FREELANCE_START
 
 
 def freelance_get_orders(update, _):
@@ -62,7 +61,7 @@ def customer_menu(update, _):
         'Здесь будет менюшка заказчика',
         reply_markup=markup_key,
     )
-    return CUSTOMER_START
+    return States.CUSTOMER_START
 
 
 def customer_orders_history(update, _):
@@ -80,7 +79,7 @@ def subscribe(update, _):
         'Условия подписки',
         reply_markup=markup_key,
     )
-    return CUSTOMER_SUBSCRIBE
+    return States.CUSTOMER_SUBSCRIBE
 
 
 def customer_place_order(update, _):
@@ -115,23 +114,23 @@ if __name__ == '__main__':
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            ROLE:
+            States.ROLE:
                 [
                     MessageHandler(Filters.text('Я разработчик'), freelance_menu),
                     MessageHandler(Filters.text('Я заказчик'), customer_menu)
                 ],
-            FREELANCE_START:
+            States.FREELANCE_START:
                 [
                     MessageHandler(Filters.text('Помощь'), freelance_menu),
                     MessageHandler(Filters.text('Доступные заказы'), freelance_get_orders),
                     MessageHandler(Filters.text('Отчет'), freelance_get_report)
                 ],
-            CUSTOMER_START:
+            States.CUSTOMER_START:
                 [
                     MessageHandler(Filters.text('Оформить подписку'), subscribe),
                     MessageHandler(Filters.text('История заказов'), customer_orders_history)
                 ],
-            CUSTOMER_SUBSCRIBE:
+            States.CUSTOMER_SUBSCRIBE:
                 [
                     MessageHandler(Filters.text('Согласен'), customer_place_order),
                     MessageHandler(Filters.text('Не согласен'), customer_declined)
