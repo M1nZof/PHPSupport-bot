@@ -1,7 +1,4 @@
-<<<<<<< Updated upstream
-from loader import updater
-=======
-# from loader import updater        # Будущий актуальный запуск
+from loader import updater        # Будущий актуальный запуск
 #
 #
 # if __name__ == '__main__':
@@ -111,7 +108,6 @@ def cancel(update, _):
         reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END
->>>>>>> Stashed changes
 
 
 if __name__ == '__main__':
