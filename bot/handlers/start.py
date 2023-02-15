@@ -1,4 +1,3 @@
-# from telebot.types import Message
 from telegram import Update
 from telegram.ext import CallbackContext
 
