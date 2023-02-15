@@ -51,7 +51,7 @@ def freelance_get_orders(update, _):
 def freelance_get_report(update, _):
     update.message.reply_text(
         'Отчет по выполненным работам \n'
-        f'{ct.fetch_completed_oreders()}',
+        f'{ct.fetch_completed_orders()}',
         reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END

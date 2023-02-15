@@ -1,7 +1,4 @@
-
-
-def fetch_completed_oreders():
-
+def fetch_completed_orders():
     completed_orders = [
         {
             'id': 151,
