@@ -1,4 +1,4 @@
-# from loader import updater        # Будущий актуальный запуск
+from loader import updater        # Будущий актуальный запуск
 #
 #
 # if __name__ == '__main__':
@@ -13,6 +13,7 @@ from telegram.ext import (
     Filters,
     ConversationHandler,
 )
+import contractor as ct
 
 ROLE, FREELANCE_START, CUSTOMER_START, CUSTOMER_SUBSCRIBE, LOCATION, BIO = range(6)
 
@@ -49,7 +50,8 @@ def freelance_get_orders(update, _):
 
 def freelance_get_report(update, _):
     update.message.reply_text(
-        'Отчет по выполненным работам',
+        'Отчет по выполненным работам \n'
+        f'{ct.fetch_completed_oreders()}',
         reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END
