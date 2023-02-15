@@ -1,4 +1,4 @@
-# from loader import updater        # Будущий актуальный запуск
+from loader import updater        # Будущий актуальный запуск
 #
 #
 # if __name__ == '__main__':
@@ -17,6 +17,7 @@ from telegram.ext import (
     CallbackQueryHandler,
     ConversationHandler, CallbackContext,
 )
+import contractor as ct
 
 
 def start(update: Update, context: CallbackContext):
@@ -52,6 +53,12 @@ def freelance_get_report(update: Update, context: CallbackContext):
     query = update.callback_query
     query.edit_message_text(text='Отчет по выполненным работам', reply_markup=None)
 
+    # update.message.reply_text(            # TODO реализовать позже
+    #    'Отчет по выполненным работам \n'
+    #    f'{ct.fetch_completed_orders()}',
+    #    reply_markup=ReplyKeyboardRemove()
+    # )
+    
     return ConversationHandler.END
 
 

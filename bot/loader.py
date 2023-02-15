@@ -1,6 +1,6 @@
 from telegram.ext import CommandHandler, Updater
 
-from bot.handlers.start import start
+from handlers.start import start
 from config import config
 
 
