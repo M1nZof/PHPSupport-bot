@@ -24,7 +24,7 @@ def start(update: Update, context: CallbackContext):
     markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
     update.message.reply_text(
         'Я - бот по организации PHP фрилансеров. '
-        'Вы хотите быть фрилансером или заказчиком?\n\n',
+        'Вы фрилансер или заказчик?',
         reply_markup=markup_key
     )
     return States.ROLE
