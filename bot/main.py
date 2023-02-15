@@ -3,16 +3,19 @@
 #
 # if __name__ == '__main__':
 #     updater.start_polling()
+from telegram.error import BadRequest
+
+from bot.keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
+    ConsentInlineKeyboard, CustomerMenuInlineKeyboard
 from bot.states.start_states import States
 from config import config
 
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import (
     Updater,
     CommandHandler,
-    MessageHandler,
-    Filters,
-    ConversationHandler,
+    CallbackQueryHandler,
+    ConversationHandler, CallbackContext,
 )
 
 
