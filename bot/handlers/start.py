@@ -1,8 +1,7 @@
-from telebot.types import Message
+# from telebot.types import Message
+from telegram import Update
+from telegram.ext import CallbackContext
 
-from loader import bot
 
-
-@bot.message_handler(commands=['start'])
-def bot_start(message: Message):
-    bot.send_message(message.chat.id, "start")
+def start(update: Update, context: CallbackContext):
+    context.bot.send_message(update.message.chat_id, "start")

@@ -1,6 +1,10 @@
-from telebot import TeleBot
-from telebot.storage import StateMemoryStorage
+from telegram.ext import CommandHandler, Updater
+
+from bot.handlers.start import start
 from config import config
 
-storage = StateMemoryStorage()
-bot = TeleBot(token=config.BOT_TOKEN, state_storage=storage)
+
+updater = Updater(token=config.BOT_TOKEN)
+dispatcher = updater.dispatcher
+
+dispatcher.add_handler(CommandHandler("start", start))
