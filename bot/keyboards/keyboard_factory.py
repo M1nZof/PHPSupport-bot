@@ -30,3 +30,31 @@ class ButtonFactory(ABC):
             index += 3
         return upd_inline_keyboard
 
+
+class RoleSelectionInlineKeyboard(ButtonFactory):
+
+    def __init__(self):
+        self.developer = {'Я Разработчик': 'freelancer'}
+        self.customer = {'Я заказчик': 'customer'}
+
+
+class FreelancerMenuInlineKeyboard(ButtonFactory):
+
+    def __init__(self):
+        self.help = {'Помощь': 'help'}
+        self.available_orders = {'Доступные заказы': 'available_orders'}
+        self.report = {'Отчет': 'report'}
+
+
+class CustomerMenuInlineKeyboard(ButtonFactory):
+
+    def __init__(self):
+        self.subscribe = {'Оформить подписку': 'subscribe'}
+        self.orders_history = {'История заказов': 'orders_history'}
+
+
+class ConsentInlineKeyboard(ButtonFactory):
+
+    def __init__(self):
+        self.agree = {'Согласен': 'agree'}
+        self.disagree = {'Не согласен': 'disagree'}
