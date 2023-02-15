@@ -19,9 +19,8 @@ from telegram.ext import (
 )
 
 
-def start(update, _):
-    reply_keyboard = [['Я разработчик', 'Я заказчик']]
-    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
+def start(update: Update, context: CallbackContext):
+    markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
     update.message.reply_text(
         'Я - бот по организации PHP фрилансеров. '
         'Вы хотите быть фрилансером или заказчиком?\n\n'
@@ -31,73 +30,59 @@ def start(update, _):
     return States.ROLE
 
 
-def freelance_menu(update, _):
-    reply_keyboard = [['Помощь', 'Доступные заказы', 'Отчет']]
-    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
-    update.message.reply_text(
-        'Описание работы бота для фрилансера',
-        reply_markup=markup_key
-    )
+def freelance_menu(update: Update, context: CallbackContext):
+    query = update.callback_query
+    markup_key = InlineKeyboardMarkup(FreelancerMenuInlineKeyboard().get_inline_keyboard())
+    try:
+        query.edit_message_text(text='Описание работы бота для фрилансера',
+                                reply_markup=markup_key)
+    except BadRequest:
+        query.edit_message_text('Описание работы бота для фрилансера (возможно более подробное)',
+                                reply_markup=markup_key)
     return States.FREELANCE_START
 
 
-def freelance_get_orders(update, _):
-    update.message.reply_text(
-        'Вывод доступных заказов',
-        reply_markup=ReplyKeyboardRemove()
-    )
+def freelance_get_orders(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.edit_message_text(text='Вывод доступных заказов', reply_markup=None)
+
     return ConversationHandler.END
 
 
-def freelance_get_report(update, _):
-    update.message.reply_text(
-        'Отчет по выполненным работам',
-        reply_markup=ReplyKeyboardRemove()
-    )
+def freelance_get_report(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.edit_message_text(text='Отчет по выполненным работам', reply_markup=None)
+
     return ConversationHandler.END
 
 
-def customer_menu(update, _):
-    reply_keyboard = [['Оформить подписку', 'История заказов']]
-    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
-    update.message.reply_text(
-        'Здесь будет менюшка заказчика',
-        reply_markup=markup_key,
-    )
+def customer_menu(update: Update, context: CallbackContext):
+    query = update.callback_query
+    markup_key = InlineKeyboardMarkup(CustomerMenuInlineKeyboard().get_inline_keyboard())
+    query.edit_message_text(text='Здесь будет менюшка заказчика', reply_markup=markup_key)
+
     return States.CUSTOMER_START
 
 
-def customer_orders_history(update, _):
-    update.message.reply_text(
-        'Отчеты по выполненным и активным работам',
-        reply_markup=ReplyKeyboardRemove(),
-    )
+def customer_orders_history(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.edit_message_text(text='Отчеты по выполненным и активным работам', reply_markup=None)
+
     return ConversationHandler.END
 
 
-def subscribe(update, _):
-    reply_keyboard = [['Согласен', 'Не согласен']]
-    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
-    update.message.reply_text(
-        'Условия подписки',
-        reply_markup=markup_key,
-    )
+def subscribe(update: Update, context: CallbackContext):
+    query = update.callback_query
+    markup_key = InlineKeyboardMarkup(ConsentInlineKeyboard().get_inline_keyboard())
+    query.edit_message_text(text='Условия подписки', reply_markup=markup_key)
+
     return States.CUSTOMER_SUBSCRIBE
 
 
-def customer_place_order(update, _):
-    update.message.reply_text(
-        'Размещение заказа',
-        reply_markup=ReplyKeyboardRemove(),
-    )
-    return ConversationHandler.END
+def customer_place_order(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.edit_message_text(text='Размещение заказа', reply_markup=None)
 
-
-def customer_declined(update, _):
-    update.message.reply_text(
-        'Прощание с клиентом',
-        reply_markup=ReplyKeyboardRemove(),
-    )
     return ConversationHandler.END
 
 
@@ -107,6 +92,10 @@ def cancel(update, _):
         ' Будет скучно - пиши.',
         reply_markup=ReplyKeyboardRemove()
     )
+def customer_declined(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.edit_message_text(text='Прощание с клиентом', reply_markup=None)
+
     return ConversationHandler.END
 
 
@@ -119,24 +108,24 @@ if __name__ == '__main__':
         states={
             States.ROLE:
                 [
-                    MessageHandler(Filters.text('Я разработчик'), freelance_menu),
-                    MessageHandler(Filters.text('Я заказчик'), customer_menu)
+                    CallbackQueryHandler(freelance_menu, pattern='freelancer'),
+                    CallbackQueryHandler(customer_menu, pattern='customer')
                 ],
             States.FREELANCE_START:
                 [
-                    MessageHandler(Filters.text('Помощь'), freelance_menu),
-                    MessageHandler(Filters.text('Доступные заказы'), freelance_get_orders),
-                    MessageHandler(Filters.text('Отчет'), freelance_get_report)
+                    CallbackQueryHandler(freelance_menu, pattern='help'),
+                    CallbackQueryHandler(freelance_get_orders, pattern='available_orders'),
+                    CallbackQueryHandler(freelance_get_report, pattern='report')
                 ],
             States.CUSTOMER_START:
                 [
-                    MessageHandler(Filters.text('Оформить подписку'), subscribe),
-                    MessageHandler(Filters.text('История заказов'), customer_orders_history)
+                    CallbackQueryHandler(subscribe, pattern='subscribe'),
+                    CallbackQueryHandler(customer_orders_history, pattern='orders_history')
                 ],
             States.CUSTOMER_SUBSCRIBE:
                 [
-                    MessageHandler(Filters.text('Согласен'), customer_place_order),
-                    MessageHandler(Filters.text('Не согласен'), customer_declined)
+                    CallbackQueryHandler(customer_place_order, pattern='agree'),
+                    CallbackQueryHandler(customer_declined, pattern='disagree')
                 ],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
