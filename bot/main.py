@@ -23,8 +23,7 @@ def start(update: Update, context: CallbackContext):
     markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
     update.message.reply_text(
         'Я - бот по организации PHP фрилансеров. '
-        'Вы хотите быть фрилансером или заказчиком?\n\n'
-        'Команда /cancel, чтобы прекратить разговор',
+        'Вы хотите быть фрилансером или заказчиком?\n\n',
         reply_markup=markup_key
     )
     return States.ROLE
@@ -86,12 +85,6 @@ def customer_place_order(update: Update, context: CallbackContext):
     return ConversationHandler.END
 
 
-def cancel(update, _):
-    update.message.reply_text(
-        'Мое дело предложить - Ваше отказаться'
-        ' Будет скучно - пиши.',
-        reply_markup=ReplyKeyboardRemove()
-    )
 def customer_declined(update: Update, context: CallbackContext):
     query = update.callback_query
     query.edit_message_text(text='Прощание с клиентом', reply_markup=None)
@@ -128,7 +121,7 @@ if __name__ == '__main__':
                     CallbackQueryHandler(customer_declined, pattern='disagree')
                 ],
         },
-        fallbacks=[CommandHandler('cancel', cancel)],
+        fallbacks=[],
     )
 
     dispatcher.add_handler(conv_handler)
