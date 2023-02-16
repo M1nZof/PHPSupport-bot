@@ -15,6 +15,7 @@ class ButtonFactory(ABC):
                 inline_keyboard.append(
                     InlineKeyboardButton(
                         text=j_key, callback_data=j_value))
+                print(j_key, j_value)
 
         try:
             if len(inline_keyboard) == any(inline_keyboard_len for inline_keyboard_len in range(1, 4)):
@@ -56,5 +57,13 @@ class CustomerMenuInlineKeyboard(ButtonFactory):
 class ConsentInlineKeyboard(ButtonFactory):
 
     def __init__(self):
+        self.agree = {'Согласен': 'agree'}
+        self.disagree = {'Не согласен': 'disagree'}
+
+
+class ReturnFreelancerInlineKeyboard(ButtonFactory):
+
+    def __init__(self):        
+        self.return_state = {'Назад': 'freelancer1'}
         self.agree = {'Согласен': 'agree'}
         self.disagree = {'Не согласен': 'disagree'}
