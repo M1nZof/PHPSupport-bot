@@ -42,7 +42,7 @@ class FreelancerMenuInlineKeyboard(ButtonFactory):
 
     def __init__(self):
         self.help = {'Помощь': 'help'}
-        self.available_orders = {'Доступные заказы': 'available_orders'}
+        self.available_orders = {'Доступные заказы': 'freelance_order#1'}
         self.report = {'Отчет': 'report'}
 
 
@@ -50,7 +50,7 @@ class CustomerMenuInlineKeyboard(ButtonFactory):
 
     def __init__(self):
         self.subscribe = {'Оформить подписку': 'subscribe'}
-        self.orders_history = {'История заказов': 'orders_history'}
+        self.orders_history = {'История заказов': 'customer_order#1'}
 
 
 class ConsentInlineKeyboard(ButtonFactory):
