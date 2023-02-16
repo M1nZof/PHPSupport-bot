@@ -1,12 +1,8 @@
-from loader import updater        # Будущий актуальный запуск
-#
-#
-# if __name__ == '__main__':
-#     updater.start_polling()
 from telegram.error import BadRequest
 
 from bot.keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
     ConsentInlineKeyboard, CustomerMenuInlineKeyboard
+from bot.keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
 from bot.states.start_states import States
 from config import config
 
@@ -19,12 +15,18 @@ from telegram.ext import (
 )
 import contractor as ct
 
+# from loader import updater        # Будущий актуальный запуск
+#
+#
+# if __name__ == '__main__':
+#     updater.start_polling()
+
 
 def start(update: Update, context: CallbackContext):
     markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
     update.message.reply_text(
         'Я - бот по организации PHP фрилансеров. '
-        'Вы хотите быть фрилансером или заказчиком?\n\n',
+        'Вы фрилансер или заказчик?',
         reply_markup=markup_key
     )
     return States.ROLE
@@ -43,10 +45,9 @@ def freelance_menu(update: Update, context: CallbackContext):
 
 
 def freelance_get_orders(update: Update, context: CallbackContext):
-    query = update.callback_query
-    query.edit_message_text(text='Вывод доступных заказов', reply_markup=None)
+    freelance_orders_page_callback(update, context)
 
-    return ConversationHandler.END
+    return States.FREELANCE_ORDERS
 
 
 def freelance_get_report(update: Update, context: CallbackContext):
@@ -71,10 +72,9 @@ def customer_menu(update: Update, context: CallbackContext):
 
 
 def customer_orders_history(update: Update, context: CallbackContext):
-    query = update.callback_query
-    query.edit_message_text(text='Отчеты по выполненным и активным работам', reply_markup=None)
+    customer_orders_page_callback(update, context)
 
-    return ConversationHandler.END
+    return States.CUSTOMER_ORDERS
 
 
 def subscribe(update: Update, context: CallbackContext):
@@ -114,19 +114,27 @@ if __name__ == '__main__':
             States.FREELANCE_START:
                 [
                     CallbackQueryHandler(freelance_menu, pattern='help'),
-                    CallbackQueryHandler(freelance_get_orders, pattern='available_orders'),
+                    CallbackQueryHandler(freelance_get_orders, pattern='freelance_order#1'),
                     CallbackQueryHandler(freelance_get_report, pattern='report')
+                ],
+            States.FREELANCE_ORDERS:
+                [
+                    CallbackQueryHandler(freelance_orders_page_callback, pattern='^freelance_order#'),
                 ],
             States.CUSTOMER_START:
                 [
                     CallbackQueryHandler(subscribe, pattern='subscribe'),
-                    CallbackQueryHandler(customer_orders_history, pattern='orders_history')
+                    CallbackQueryHandler(customer_orders_history, pattern='customer_order#1')
                 ],
             States.CUSTOMER_SUBSCRIBE:
                 [
                     CallbackQueryHandler(customer_place_order, pattern='agree'),
                     CallbackQueryHandler(customer_declined, pattern='disagree')
                 ],
+            States.CUSTOMER_ORDERS:
+                [
+                    CallbackQueryHandler(customer_orders_page_callback, pattern='^customer_order#')
+                ]
         },
         fallbacks=[],
     )
