@@ -1,8 +1,8 @@
 from telegram.error import BadRequest
 
-from bot.keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
+from keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
 from keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
-    ConsentInlineKeyboard, CustomerMenuInlineKeyboard, ReturnFreelancerInlineKeyboard
+    ConsentInlineKeyboard, CustomerMenuInlineKeyboard
 #from keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
 from states.start_states import States
 from config import config
@@ -53,8 +53,13 @@ def freelance_get_orders(update: Update, context: CallbackContext):
 
 def freelance_get_report(update: Update, context: CallbackContext):
     query = update.callback_query
-    markup_key = InlineKeyboardMarkup(ReturnFreelancerInlineKeyboard().get_inline_keyboard())
-    query.edit_message_text(text='Отчет по выполненным работам', reply_markup=markup_key)
+    keyboard = [
+        [
+            InlineKeyboardButton("Назад", callback_data='freelancer'),            
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(text='Отчет по выполненным работам', reply_markup=reply_markup)
 
     # update.message.reply_text(            # TODO реализовать позже
     #    'Отчет по выполненным работам \n'
@@ -118,11 +123,12 @@ if __name__ == '__main__':
                     CallbackQueryHandler(freelance_menu, pattern='help'),
                     CallbackQueryHandler(freelance_get_orders, pattern='freelance_order#1'),
                     CallbackQueryHandler(freelance_get_report, pattern='report'),
-                    CallbackQueryHandler(freelance_menu, pattern='freelancer1')
+                    CallbackQueryHandler(freelance_menu, pattern='freelancer')
                 ],
             States.FREELANCE_ORDERS:
                 [
-                    #CallbackQueryHandler(freelance_orders_page_callback, pattern='^freelance_order#'),
+                    CallbackQueryHandler(freelance_orders_page_callback, pattern='^freelance_order#'),
+                    CallbackQueryHandler(freelance_menu, pattern='back')
                 ],
             States.CUSTOMER_START:
                 [
@@ -136,7 +142,7 @@ if __name__ == '__main__':
                 ],
             States.CUSTOMER_ORDERS:
                 [
-                   # CallbackQueryHandler(customer_orders_page_callback, pattern='^customer_order#')
+                   CallbackQueryHandler(customer_orders_page_callback, pattern='^customer_order#')
                 ]
         },
         fallbacks=[],
