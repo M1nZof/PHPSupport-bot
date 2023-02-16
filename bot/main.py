@@ -13,6 +13,7 @@ from telegram.ext import (
     CallbackQueryHandler,
     ConversationHandler, CallbackContext,
 )
+from decouple import config
 import contractor as ct
 
 # from loader import updater        # Будущий актуальный запуск
@@ -100,7 +101,7 @@ def customer_declined(update: Update, context: CallbackContext):
 
 
 if __name__ == '__main__':
-    updater = Updater(token=config.BOT_TOKEN)
+    updater = Updater(token=config('BOT_TOKEN'))
     dispatcher = updater.dispatcher
 
     conv_handler = ConversationHandler(
