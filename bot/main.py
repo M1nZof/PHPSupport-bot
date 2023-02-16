@@ -1,5 +1,6 @@
 from telegram.error import BadRequest
 
+from bot.keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
 from keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
     ConsentInlineKeyboard, CustomerMenuInlineKeyboard, ReturnFreelancerInlineKeyboard
 #from keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
