@@ -5,9 +5,9 @@ from loader import updater        # Будущий актуальный запу
 #     updater.start_polling()
 from telegram.error import BadRequest
 
-from bot.keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
+from keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
     ConsentInlineKeyboard, CustomerMenuInlineKeyboard
-from bot.states.start_states import States
+from states.start_states import States
 from config import config
 
 from telegram import InlineKeyboardMarkup, Update
