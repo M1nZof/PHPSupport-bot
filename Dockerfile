@@ -1,12 +1,8 @@
 FROM python:3.8
 
-RUN dir
+WORKDIR /bot
 
-WORKDIR ./bot
-
-RUN dir
-
-# COPY . /bot
+COPY . /bot
 
 RUN pip install -r requirements.txt
 
