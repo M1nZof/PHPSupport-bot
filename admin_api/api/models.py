@@ -60,12 +60,6 @@ class Task(models.Model):
     cost = models.IntegerField(
         verbose_name='Стоимость',
     )
-    start_date = models.DateTimeField(
-        verbose_name='Старт работы',
-    )
-    end_date = models.DateTimeField(
-        verbose_name='Конец работы',
-    )
     client = models.ForeignKey(
         Client,
         verbose_name='Клиент',
@@ -96,7 +90,7 @@ class Question(models.Model):
         related_name='questions',
         on_delete=models.PROTECT
     )
-    text_ = models.TextField(
+    text = models.TextField(
         verbose_name='Текст вопроса'
     )
 
@@ -106,4 +100,4 @@ class Question(models.Model):
         verbose_name_plural = 'Вопросы'
 
     def __str__(self):
-        return f'{self.task}'
+        return f'{self.text}'
