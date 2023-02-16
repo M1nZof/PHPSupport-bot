@@ -37,8 +37,8 @@ class Client(models.Model):
 
     class Meta:
         db_table = 'client'
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'Заказчик'
+        verbose_name_plural = 'Заказчики'
 
     def __str__(self):
         return f'{self.fullname}'
