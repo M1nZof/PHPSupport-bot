@@ -1,7 +1,4 @@
-
-
-def fetch_completed_oreders():
-
+def fetch_completed_orders():
     completed_orders = [
         {
             'id': 151,
@@ -68,14 +65,14 @@ def fetch_completed_oreders():
         },
     ]
     orders_to_message = list()
-    total_cost = 0;
+    total_cost = 0
     for order in completed_orders:
         orders_to_message.append(
-            f'описание: {order["description"]}, оплата: {order["cost"]} \n'            
+            f'описание: {order["description"]}, оплата: {order["cost"]} \n'
         )
         total_cost += order['cost']
     orders_to_message.append(
         f'Общая сумма: {total_cost} \n'
     )
     return ''.join(orders_to_message)
-#print(fetch_completed_oreders())
+# print(fetch_completed_oreders())
