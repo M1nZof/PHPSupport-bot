@@ -1,9 +1,9 @@
 from telegram.error import BadRequest
 
-from bot.keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
+from keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
     ConsentInlineKeyboard, CustomerMenuInlineKeyboard
-from bot.keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
-from bot.states.start_states import States
+from keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
+from states.start_states import States
 from config import config
 
 from telegram import InlineKeyboardMarkup, Update

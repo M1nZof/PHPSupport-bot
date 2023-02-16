@@ -1,6 +1,6 @@
 FROM python:3.8
 
-WORKDIR /PHPSupport-bot
+WORKDIR /PHPSupport-bot/bot
 
 COPY ./ /PHPSupport-bot
 
