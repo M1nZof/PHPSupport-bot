@@ -99,3 +99,11 @@ class Question(models.Model):
     text_ = models.TextField(
         verbose_name='Текст вопроса'
     )
+
+    class Meta:
+        db_table = 'question'
+        verbose_name = 'Вопрос'
+        verbose_name_plural = 'Вопросы'
+
+    def __str__(self):
+        return f'{self.task}'
