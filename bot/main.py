@@ -139,8 +139,10 @@ if __name__ == '__main__':
             States.CUSTOMER_START:
                 [
                     CallbackQueryHandler(subscribe, pattern='subscribe'),
-                    CallbackQueryHandler(customer_orders_history, pattern='customer_order#1')
+                    CallbackQueryHandler(customer_orders_history, pattern='customer_order#1'),
+                    
                 ],
+                
             States.CUSTOMER_SUBSCRIBE:
                 [
                     CallbackQueryHandler(customer_place_order, pattern='agree'),
@@ -148,8 +150,9 @@ if __name__ == '__main__':
                 ],
             States.CUSTOMER_ORDERS:
                 [
-                    CallbackQueryHandler(customer_orders_page_callback, pattern='^customer_order#')
-                ]
+                    CallbackQueryHandler(customer_orders_page_callback, pattern='^customer_order#'),
+                    CallbackQueryHandler(customer_menu, pattern='back')
+                 ],   
         },
         fallbacks=[],
     )
