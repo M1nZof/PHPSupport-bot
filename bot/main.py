@@ -32,6 +32,17 @@ def start(update: Update, context: CallbackContext):
     )
     return States.ROLE
 
+def start1(update: Update, context: CallbackContext):
+   
+    query = update.callback_query 
+    markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
+    query.message.reply_text(
+       # 'Я - бот по организации PHP фрилансеров. '
+       text= 'Вы фрилансер или заказчик?',
+        reply_markup=markup_key
+    )
+    return States.ROLE
+
 
 def freelance_menu(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -53,12 +64,7 @@ def freelance_get_orders(update: Update, context: CallbackContext):
 
 def freelance_get_report(update: Update, context: CallbackContext):
     query = update.callback_query
-    keyboard = [
-        [
-            InlineKeyboardButton("Назад", callback_data='freelancer'),            
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+    reply_markup = ct.return_button('freelancer')
     query.edit_message_text(text='Отчет по выполненным работам', reply_markup=reply_markup)
 
     # update.message.reply_text(            # TODO реализовать позже
@@ -116,14 +122,16 @@ if __name__ == '__main__':
             States.ROLE:
                 [
                     CallbackQueryHandler(freelance_menu, pattern='freelancer'),
-                    CallbackQueryHandler(customer_menu, pattern='customer')
+                    CallbackQueryHandler(customer_menu, pattern='customer'),
+                    #CallbackQueryHandler(start, pattern='freelancer')
                 ],
             States.FREELANCE_START:
                 [
                     CallbackQueryHandler(freelance_menu, pattern='help'),
                     CallbackQueryHandler(freelance_get_orders, pattern='freelance_order#1'),
                     CallbackQueryHandler(freelance_get_report, pattern='report'),
-                    CallbackQueryHandler(freelance_menu, pattern='freelancer')
+                    CallbackQueryHandler(freelance_menu, pattern='freelancer'),
+                    CallbackQueryHandler(start1, pattern='main_menu')
                 ],
             States.FREELANCE_ORDERS:
                 [

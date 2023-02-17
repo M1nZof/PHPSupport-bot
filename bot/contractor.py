@@ -1,3 +1,8 @@
+from telegram import InlineKeyboardMarkup, Update, InlineKeyboardButton
+
+
+
+
 def fetch_completed_orders():
     completed_orders = [
         {
@@ -76,3 +81,11 @@ def fetch_completed_orders():
     )
     return ''.join(orders_to_message)
 # print(fetch_completed_oreders())
+
+def return_button(callback_action, name='Назад'):
+    keyboard = [
+        [
+            InlineKeyboardButton(name, callback_data=callback_action),            
+        ]
+    ]
+    return InlineKeyboardMarkup(keyboard)
