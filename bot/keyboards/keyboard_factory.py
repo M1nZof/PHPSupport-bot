@@ -1,7 +1,7 @@
 import math
 from abc import ABC
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton
 
 
 class ButtonFactory(ABC):
@@ -44,7 +44,6 @@ class FreelancerMenuInlineKeyboard(ButtonFactory):
         self.help = {'Помощь': 'help'}
         self.available_orders = {'Доступные заказы': 'freelance_order#1'}
         self.report = {'Отчет': 'report'}
-        self.return_back = {'Назад': 'main_menu'}
 
 
 class CustomerMenuInlineKeyboard(ButtonFactory):
