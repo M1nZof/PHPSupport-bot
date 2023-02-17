@@ -1,3 +1,5 @@
 python-dotenv==0.21.1
 python-telegram-bot==13.1
 python-telegram-bot-pagination==0.0.2
+python-decouple==3.7
+envreader==0.0.5
