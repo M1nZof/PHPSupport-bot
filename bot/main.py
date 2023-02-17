@@ -1,8 +1,8 @@
 from telegram.error import BadRequest
 
-from keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
 from keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
     ConsentInlineKeyboard, CustomerMenuInlineKeyboard
+from bot.keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
 from states.start_states import States
 from config import config
 
@@ -33,12 +33,12 @@ def start(update: Update, context: CallbackContext):
     return States.ROLE
 
 
-def start1(update: Update, context: CallbackContext):
+def start1(update: Update, context: CallbackContext):       # TODO временное решение для демонстрации
     query = update.callback_query
     markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
-    query.message.reply_text(
-        # 'Я - бот по организации PHP фрилансеров. '
-        text='Вы фрилансер или заказчик?',
+    query.edit_message_text(
+        text='Я - бот по организации PHP фрилансеров. '
+        'Вы фрилансер или заказчик?',
         reply_markup=markup_key
     )
     return States.ROLE
@@ -129,7 +129,7 @@ if __name__ == '__main__':
                     CallbackQueryHandler(freelance_menu, pattern='help'),
                     CallbackQueryHandler(freelance_get_orders, pattern='freelance_order#1'),
                     CallbackQueryHandler(freelance_get_report, pattern='report'),
-                    CallbackQueryHandler(freelance_menu, pattern='freelancer'),
+                    CallbackQueryHandler(start1, pattern='main_menu'),      # TODO временное решение для демонстрации
                 ],
             States.FREELANCE_ORDERS:
                 [
