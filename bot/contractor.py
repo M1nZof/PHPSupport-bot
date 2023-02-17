@@ -82,6 +82,7 @@ def fetch_completed_orders():
     return ''.join(orders_to_message)
 # print(fetch_completed_oreders())
 
+
 def return_button(callback_action, name='Назад'):
     keyboard = [
         [

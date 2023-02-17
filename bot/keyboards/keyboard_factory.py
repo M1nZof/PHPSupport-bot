@@ -52,6 +52,7 @@ class CustomerMenuInlineKeyboard(ButtonFactory):
     def __init__(self):
         self.subscribe = {'Оформить подписку': 'subscribe'}
         self.orders_history = {'История заказов': 'customer_order#1'}
+        self.return_back = {'Назад': 'main_menu'}
 
 
 class ConsentInlineKeyboard(ButtonFactory):
@@ -64,5 +65,5 @@ class ConsentInlineKeyboard(ButtonFactory):
 class ReturnFreelancerInlineKeyboard(ButtonFactory):
 
     def __init__(self):        
-        self.return_state = {'Назад': 'freelancer1'}
+        self.return_state = {'Назад': 'freelancer'}
         

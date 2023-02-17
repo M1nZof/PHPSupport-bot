@@ -100,7 +100,8 @@ def subscribe(update: Update, context: CallbackContext):
 
 def customer_place_order(update: Update, context: CallbackContext):
     query = update.callback_query
-    query.edit_message_text(text='Размещение заказа', reply_markup=None)
+    reply_markup = ct.return_button('back')
+    query.edit_message_text(text='Размещение заказа', reply_markup=reply_markup)
 
     return ConversationHandler.END
 
@@ -129,24 +130,25 @@ if __name__ == '__main__':
                     CallbackQueryHandler(freelance_menu, pattern='help'),
                     CallbackQueryHandler(freelance_get_orders, pattern='freelance_order#1'),
                     CallbackQueryHandler(freelance_get_report, pattern='report'),
-                    CallbackQueryHandler(start1, pattern='main_menu'),      # TODO временное решение для демонстрации
+                    CallbackQueryHandler(start1, pattern='main_menu'),
+                    # TODO временное решение для демонстрации
                 ],
             States.FREELANCE_ORDERS:
                 [
                     CallbackQueryHandler(freelance_orders_page_callback, pattern='^freelance_order#'),
-                    CallbackQueryHandler(freelance_menu, pattern='back')
+                    CallbackQueryHandler(freelance_menu, pattern='freelancer')
                 ],
             States.CUSTOMER_START:
                 [
                     CallbackQueryHandler(subscribe, pattern='subscribe'),
                     CallbackQueryHandler(customer_orders_history, pattern='customer_order#1'),
-                    
+                    CallbackQueryHandler(start1, pattern='main_menu')
                 ],
                 
             States.CUSTOMER_SUBSCRIBE:
                 [
                     CallbackQueryHandler(customer_place_order, pattern='agree'),
-                    CallbackQueryHandler(customer_declined, pattern='disagree')
+                    CallbackQueryHandler(customer_declined, pattern='disagree'),
                 ],
             States.CUSTOMER_ORDERS:
                 [
@@ -154,7 +156,7 @@ if __name__ == '__main__':
                     CallbackQueryHandler(customer_menu, pattern='back')
                  ],   
         },
-        fallbacks=[],
+        fallbacks=[CommandHandler('rerun', start)],
     )
 
     dispatcher.add_handler(conv_handler)
