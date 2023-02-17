@@ -1,7 +1,7 @@
 import math
 from abc import ABC
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton
 
 
 class ButtonFactory(ABC):
@@ -14,7 +14,7 @@ class ButtonFactory(ABC):
             for j_key, j_value in i_key.items():
                 inline_keyboard.append(
                     InlineKeyboardButton(
-                        text=j_key, callback_data=j_value))
+                        text=j_key, callback_data=j_value))                
 
         try:
             if len(inline_keyboard) == any(inline_keyboard_len for inline_keyboard_len in range(1, 4)):
@@ -44,6 +44,7 @@ class FreelancerMenuInlineKeyboard(ButtonFactory):
         self.help = {'Помощь': 'help'}
         self.available_orders = {'Доступные заказы': 'freelance_order#1'}
         self.report = {'Отчет': 'report'}
+        self.return_back = {'Назад': 'main_menu'}       # TODO временное решение для демонстрации
 
 
 class CustomerMenuInlineKeyboard(ButtonFactory):
@@ -51,6 +52,7 @@ class CustomerMenuInlineKeyboard(ButtonFactory):
     def __init__(self):
         self.subscribe = {'Оформить подписку': 'subscribe'}
         self.orders_history = {'История заказов': 'customer_order#1'}
+        self.return_back = {'Назад': 'main_menu'}
 
 
 class ConsentInlineKeyboard(ButtonFactory):
@@ -58,3 +60,10 @@ class ConsentInlineKeyboard(ButtonFactory):
     def __init__(self):
         self.agree = {'Согласен': 'agree'}
         self.disagree = {'Не согласен': 'disagree'}
+
+
+class ReturnFreelancerInlineKeyboard(ButtonFactory):
+
+    def __init__(self):        
+        self.return_state = {'Назад': 'freelancer'}
+        
