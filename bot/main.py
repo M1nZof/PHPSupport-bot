@@ -2,7 +2,7 @@ from telegram.error import BadRequest
 
 from keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
     ConsentInlineKeyboard, CustomerMenuInlineKeyboard
-from bot.keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
+from keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback
 from states.start_states import States
 from config import config
 
@@ -65,7 +65,7 @@ def freelance_get_orders(update: Update, context: CallbackContext):
 
 def freelance_get_report(update: Update, context: CallbackContext):
     query = update.callback_query
-    reply_markup = ct.return_button('freelancer')
+    reply_markup = ct.return_button('back')
     query.edit_message_text(text='Отчет по выполненным работам', reply_markup=reply_markup)
 
     # update.message.reply_text(            # TODO реализовать позже
@@ -137,7 +137,7 @@ if __name__ == '__main__':
             States.FREELANCE_ORDERS:
                 [
                     CallbackQueryHandler(freelance_orders_page_callback, pattern='^freelance_order#'),
-                    CallbackQueryHandler(freelance_menu, pattern='freelancer')
+                    CallbackQueryHandler(freelance_menu, pattern='back')
                 ],
             States.CUSTOMER_START:
                 [
