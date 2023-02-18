@@ -26,17 +26,18 @@ def freelance_orders_page_callback(update: Update, context: CallbackContext):
     page = int(query.data.split('#')[1])
 
     paginator = InlineKeyboardPaginator(
-        len(orders_example),        # TODO изменить на данные из базы
+        context.user_data['num_free_works'],        # TODO изменить на данные из базы
         current_page=page,
         data_pattern='freelance_order#{page}'
     )
 
-    paginator.add_before(InlineKeyboardButton('Взять заказ', callback_data='like#{}'.format(page)))
+    paginator.add_before(InlineKeyboardButton('Взять заказ', callback_data='get_order'))
     paginator.add_after(InlineKeyboardButton('Вернуться в меню', callback_data='back'))
     # TODO прописать возвращение в freelance menu
 
+    context.user_data['num_order'] = page-1
     query.edit_message_text(
-        text=orders_example[page - 1],  # TODO изменить на данные из базы + форматирование
+        text=context.user_data['free_works']['Описание'][page-1],  # TODO изменить на данные из базы + форматирование
         reply_markup=paginator.markup,
         parse_mode='Markdown'
     )
