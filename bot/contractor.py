@@ -1,6 +1,14 @@
 from telegram import InlineKeyboardMarkup, Update, InlineKeyboardButton
+import pandas as pd
+from telegram.ext import CallbackContext
 
 
+def get_free_works(context: CallbackContext):
+
+    free_works = pd.read_csv('works_free.csv', header=0, encoding='cp1251', delimiter=';')
+    context.user_data['free_works'] = free_works.to_dict()
+    context.user_data['num_free_works'] = free_works.shape[0]
+    
 
 
 def fetch_completed_orders():
@@ -90,3 +98,23 @@ def return_button(callback_action, name='Назад'):
         ]
     ]
     return InlineKeyboardMarkup(keyboard)
+
+
+def choice_order(update: Update, context: CallbackContext):
+
+    query = update.callback_query    
+    num_order = context.user_data["num_order"]
+    message = f"Выбран заказ: {context.user_data['free_works']['Описание'][num_order]}\
+    Введите расчётное время выполнения заказа"
+    query.edit_message_text(text=message, reply_markup=None)
+    query = update.callback_query
+    
+    context.user_data["estimate"] = query.data
+    print(context.user_data["estimate"])
+    
+def form_freelance_order(update: Update, context: CallbackContext):    
+    
+    query = update.callback_query
+    query.data
+    context.user_data["estimate"] = update.message
+    print(context.user_data["estimate"])
