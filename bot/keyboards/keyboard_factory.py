@@ -66,4 +66,11 @@ class ReturnFreelancerInlineKeyboard(ButtonFactory):
 
     def __init__(self):        
         self.return_state = {'Назад': 'freelancer'}
-        
+
+
+class AdminMenuInlineKeyboard(ButtonFactory):
+
+    def __init__(self):
+        self.admin_orders = {'Заказы': 'admin_orders#1'}
+        self.customers = {'Клиенты': 'admin_customers#1'}
+        self.freelancers = {'Подрядчики': 'admin_freelancers#1'}
