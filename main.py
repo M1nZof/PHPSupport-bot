@@ -14,6 +14,7 @@ from telegram.ext import (
     ConversationHandler, CallbackContext, MessageHandler, Filters
 )
 import bot.contractor as ct
+from textwrap import dedent
 
 
 # from loader import updater        # Будущий актуальный запуск
@@ -32,7 +33,7 @@ def start(update: Update, context: CallbackContext):
     )
     ct.get_free_works(context=context)
     ct.get_orders_in_progress(context)
-    print(context.user_data['free_works'])
+    # print(context.user_data['free_works'])
     return States.ROLE
 
 
@@ -80,10 +81,10 @@ def freelance_get_report(update: Update, context: CallbackContext):
     query = update.callback_query
     reply_markup = ct.return_button('freelancer')
     # query.edit_message_text(text='Отчет по выполненным работам', reply_markup=reply_markup)
-
+    msg = ct.fetch_completed_orders(update, context) 
     query.edit_message_text(text=            # TODO реализовать позже
        'Отчет по выполненным работам \n'
-        f'{ct.fetch_completed_orders(update, context)}',
+        f'{msg}',
         reply_markup=reply_markup
     )   
 
