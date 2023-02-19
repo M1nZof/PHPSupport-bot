@@ -79,13 +79,13 @@ def form_order(update: Update, context: CallbackContext):
 def freelance_get_report(update: Update, context: CallbackContext):
     query = update.callback_query
     reply_markup = ct.return_button('freelancer')
-    query.edit_message_text(text='Отчет по выполненным работам', reply_markup=reply_markup)
+    # query.edit_message_text(text='Отчет по выполненным работам', reply_markup=reply_markup)
 
-    # update.message.reply_text(            # TODO реализовать позже
-    #    'Отчет по выполненным работам \n'
-    #    f'{ct.fetch_completed_orders()}',
-    #    reply_markup=ReplyKeyboardRemove()
-    # )   
+    query.edit_message_text(text=            # TODO реализовать позже
+       'Отчет по выполненным работам \n'
+        f'{ct.fetch_completed_orders(update, context)}',
+        reply_markup=reply_markup
+    )   
 
     return States.FREELANCE_START
 
@@ -145,6 +145,7 @@ if __name__ == '__main__':
                     CallbackQueryHandler(freelance_get_orders, pattern='freelance_order#1'),
                     CallbackQueryHandler(freelance_get_report, pattern='report'),
                     CallbackQueryHandler(start1, pattern='main_menu'),
+                    CallbackQueryHandler(freelance_menu, pattern='freelancer'),
                     
                     # TODO временное решение для демонстрации
                 ],
@@ -152,7 +153,7 @@ if __name__ == '__main__':
                 [
                     CallbackQueryHandler(freelance_orders_page_callback, pattern='^freelance_order#'),
                     CallbackQueryHandler(freelance_menu, pattern='freelancer'),
-                    CallbackQueryHandler(freelance_menu,pattern='back'),
+                    CallbackQueryHandler(freelance_menu, pattern='back'),
                     CallbackQueryHandler(freelance_choice_order, pattern='get_order'),
                     
                 ],
