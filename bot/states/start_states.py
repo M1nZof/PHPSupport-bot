@@ -9,3 +9,8 @@ class States(Enum):
     CUSTOMER_SUBSCRIBE = auto()
     CUSTOMER_ORDERS = auto()
     FREELANCE_CHOICE_ORDERS = auto()
+    ADMIN_START = auto()
+    ADMIN_MENU = auto()
+    ADMIN_ORDERS = auto()
+    ADMIN_CUSTOMERS = auto()
+    ADMIN_FREELANCERS = auto()
