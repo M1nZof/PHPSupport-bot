@@ -8,3 +8,4 @@ class States(Enum):
     CUSTOMER_START = auto()
     CUSTOMER_SUBSCRIBE = auto()
     CUSTOMER_ORDERS = auto()
+    FREELANCE_CHOICE_ORDERS = auto()

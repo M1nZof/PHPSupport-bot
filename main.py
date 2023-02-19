@@ -31,7 +31,8 @@ def start(update: Update, context: CallbackContext):
         reply_markup=markup_key
     )
     ct.get_free_works(context=context)
-    print(context.user_data['num_free_works'])
+    ct.get_orders_in_progress(context)
+    print(context.user_data['free_works'])
     return States.ROLE
 
 
@@ -66,6 +67,13 @@ def freelance_get_orders(update: Update, context: CallbackContext):
 def freelance_choice_order(update: Update, context: CallbackContext):
 
     ct.choice_order(update, context)
+
+    return States.FREELANCE_CHOICE_ORDERS
+
+def form_order(update: Update, context: CallbackContext):
+
+    ct.form_freelance_order(update, context)
+    return ConversationHandler.END
 
 
 def freelance_get_report(update: Update, context: CallbackContext):
@@ -146,9 +154,7 @@ if __name__ == '__main__':
                     CallbackQueryHandler(freelance_menu, pattern='freelancer'),
                     CallbackQueryHandler(freelance_menu,pattern='back'),
                     CallbackQueryHandler(freelance_choice_order, pattern='get_order'),
-                    MessageHandler(
-                        Filters.text, 
-                    ),
+                    
                 ],
             States.CUSTOMER_START:
                 [
@@ -166,7 +172,13 @@ if __name__ == '__main__':
                 [
                     CallbackQueryHandler(customer_orders_page_callback, pattern='^customer_order#'),
                     CallbackQueryHandler(customer_menu, pattern='back')
-                 ],   
+                 ],
+            States.FREELANCE_CHOICE_ORDERS:
+                [
+                    MessageHandler(
+                         Filters.text, form_order
+                    ),
+                ]   
         },
         fallbacks=[CommandHandler('rerun', start)],
     )
