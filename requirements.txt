@@ -2,4 +2,3 @@ python-dotenv==0.21.1
 python-telegram-bot==13.1
 python-telegram-bot-pagination==0.0.2
 environs==9.5.0
-Django==4.1.7
