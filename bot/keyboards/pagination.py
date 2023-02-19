@@ -76,3 +76,69 @@ def customer_orders_page_callback(update: Update, context: CallbackContext):
         reply_markup=paginator.markup,
         parse_mode='Markdown'
     )
+
+
+def admin_orders_page_callback(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
+
+    page = int(query.data.split('#')[1])
+
+    paginator = InlineKeyboardPaginator(
+        len(orders_example),  # TODO изменить на данные из базы
+        current_page=page,
+        data_pattern='admin_orders#{page}'
+    )
+
+    paginator.add_after(InlineKeyboardButton('Вернуться в меню', callback_data='back'))
+    # TODO прописать возвращение в admin menu
+
+    query.edit_message_text(
+        text=orders_example[page - 1],  # TODO изменить на данные из базы + форматирование
+        reply_markup=paginator.markup,
+        parse_mode='Markdown'
+    )
+
+
+def admin_customers_page_callback(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
+
+    page = int(query.data.split('#')[1])
+
+    paginator = InlineKeyboardPaginator(
+        len(orders_example),  # TODO изменить на данные из базы
+        current_page=page,
+        data_pattern='admin_customers#{page}'
+    )
+
+    paginator.add_after(InlineKeyboardButton('Вернуться в меню', callback_data='back'))
+    # TODO прописать возвращение в admin menu
+
+    query.edit_message_text(
+        text=orders_example[page - 1],  # TODO изменить на данные из базы + форматирование
+        reply_markup=paginator.markup,
+        parse_mode='Markdown'
+    )
+
+
+def admin_freelancers_page_callback(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
+
+    page = int(query.data.split('#')[1])
+
+    paginator = InlineKeyboardPaginator(
+        len(orders_example),  # TODO изменить на данные из базы
+        current_page=page,
+        data_pattern='admin_freelancers#{page}'
+    )
+
+    paginator.add_after(InlineKeyboardButton('Вернуться в меню', callback_data='back'))
+    # TODO прописать возвращение в admin menu
+
+    query.edit_message_text(
+        text=orders_example[page - 1],  # TODO изменить на данные из базы + форматирование
+        reply_markup=paginator.markup,
+        parse_mode='Markdown'
+    )
