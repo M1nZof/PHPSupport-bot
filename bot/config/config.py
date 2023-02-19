@@ -8,3 +8,4 @@ else:
     load_dotenv()
     
 BOT_TOKEN = os.getenv('BOT_TOKEN')
+secret_key = os.getenv('SECRET_KEY')
