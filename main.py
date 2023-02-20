@@ -1,4 +1,5 @@
 from bot.config.config import secret_key
+from bot.db import db, Freelancer, initialize_db, Client
 from bot.keyboards.keyboard_factory import RoleSelectionInlineKeyboard, FreelancerMenuInlineKeyboard, \
     ConsentInlineKeyboard, CustomerMenuInlineKeyboard, AdminMenuInlineKeyboard
 from bot.keyboards.pagination import freelance_orders_page_callback, customer_orders_page_callback, \
@@ -26,30 +27,46 @@ import bot.contractor as ct
 
 
 def start(update: Update, context: CallbackContext):
-    markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
-    update.message.reply_text(
-        'Я - бот по организации PHP фрилансеров. '
-        'Вы фрилансер или заказчик?',
-        reply_markup=markup_key
-    )
-    ct.get_free_works(context=context)
-    ct.get_orders_in_progress(context)
-    print(context.user_data['free_works'])
-    return States.ROLE
+    try:
+        user_tg_id = update.message.from_user.id
+    except AttributeError:
+        user_tg_id = update.callback_query.from_user.id
+    context.user_data["user_tg_id"] = user_tg_id
+    if Client.select().where(Client.telegram_id == user_tg_id):
+        customer_menu(update, context)
+    elif Freelancer.select().where(Freelancer.telegram_id == user_tg_id):
+        freelance_menu(update, context)
+    else:
+        markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
+        update.message.reply_text(
+            'Я - бот по организации PHP фрилансеров. '
+            'Вы фрилансер или заказчик?',
+            reply_markup=markup_key
+        )
+        # ct.get_free_works(context=context)
+        # ct.get_orders_in_progress(context)
+        return States.ROLE
 
 
-def start1(update: Update, context: CallbackContext):  # TODO временное решение для демонстрации
-    query = update.callback_query
-    markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
-    query.edit_message_text(
-        text='Я - бот по организации PHP фрилансеров. '
-             'Вы фрилансер или заказчик?',
-        reply_markup=markup_key
-    )
-    return States.ROLE
+# def start1(update: Update, context: CallbackContext):  # TODO временное решение для демонстрации
+#
+#     if Client.select().where(telegram_id=user_tg_id):
+#         print(1)
+#     query = update.callback_query
+#     markup_key = InlineKeyboardMarkup(RoleSelectionInlineKeyboard().get_inline_keyboard())
+#     query.edit_message_text(
+#         text='Я - бот по организации PHP фрилансеров. '
+#              'Вы фрилансер или заказчик?',
+#         reply_markup=markup_key
+#     )
+#     return States.ROLE
 
 
 def freelance_menu(update: Update, context: CallbackContext):
+    user_tg_id = context.user_data["user_tg_id"]
+    if not Freelancer.select().where(Freelancer.telegram_id == user_tg_id):
+        Freelancer.create(telegram_id=user_tg_id, full_name='abc')
+
     query = update.callback_query
     markup_key = InlineKeyboardMarkup(FreelancerMenuInlineKeyboard().get_inline_keyboard())
     try:
@@ -58,6 +75,9 @@ def freelance_menu(update: Update, context: CallbackContext):
     except BadRequest:
         query.edit_message_text('Описание работы бота для фрилансера (возможно более подробное)',
                                 reply_markup=markup_key)
+    except AttributeError:
+        update.message.reply_text(text='Описание работы бота для фрилансера',
+                                  reply_markup=markup_key)
     return States.FREELANCE_START
 
 
@@ -93,6 +113,10 @@ def freelance_get_report(update: Update, context: CallbackContext):
 
 
 def customer_menu(update: Update, context: CallbackContext):
+    user_tg_id = context.user_data["user_tg_id"]
+    if not Client.select().where(Client.telegram_id == user_tg_id):
+        Client.create(telegram_id=user_tg_id, full_name='abc')
+
     query = update.callback_query
     markup_key = InlineKeyboardMarkup(CustomerMenuInlineKeyboard().get_inline_keyboard())
     query.edit_message_text(text='Здесь будет менюшка заказчика', reply_markup=markup_key)
@@ -182,6 +206,7 @@ def stop(update: Update, context: CallbackContext):
 if __name__ == '__main__':
     updater = Updater(token=config.BOT_TOKEN)
     dispatcher = updater.dispatcher
+    initialize_db()
 
     work_area = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
@@ -196,7 +221,7 @@ if __name__ == '__main__':
                     CallbackQueryHandler(freelance_menu, pattern='help'),
                     CallbackQueryHandler(freelance_get_orders, pattern='freelance_order#1'),
                     CallbackQueryHandler(freelance_get_report, pattern='report'),
-                    CallbackQueryHandler(start1, pattern='main_menu'),
+                    CallbackQueryHandler(start, pattern='main_menu'),
                     CallbackQueryHandler(freelance_menu, pattern='freelancer'),
 
                     # TODO временное решение для демонстрации
@@ -213,7 +238,7 @@ if __name__ == '__main__':
                 [
                     CallbackQueryHandler(subscribe, pattern='subscribe'),
                     CallbackQueryHandler(customer_orders_history, pattern='customer_order#1'),
-                    CallbackQueryHandler(start1, pattern='main_menu')
+                    CallbackQueryHandler(start, pattern='main_menu')
                 ],
 
             States.CUSTOMER_SUBSCRIBE:
