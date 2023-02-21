@@ -2,9 +2,9 @@
 
 ## Настройка .env
 
-`BOT_TOKEN` - токен от бота;
-`SECRET_KEY` - пароль от админки;
-`DATABASE_NAME` - название файла базы данных
+- `BOT_TOKEN` - токен от бота;
+- `SECRET_KEY` - пароль от админки;
+- `DATABASE_NAME` - название файла базы данных
 
 ```
 BOT_TOKEN=1324972:jsdfbkvdfhvsdfkjgutuhf
